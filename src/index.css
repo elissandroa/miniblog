@@ -48,7 +48,8 @@ form {
 label {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1px;
+  align-items: start;
+  margin-bottom: 1em;
 }
 
 label span {
@@ -58,9 +59,10 @@ label span {
 
 input,
 textarea {
+  width: 100%;
   box-sizing: border-box;
   border: none;
-  border: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
   padding: .8em 0;
   background-color: transparent;
 }
@@ -114,4 +116,12 @@ button[disabled]{
   border: 1px solid #F5C6CB;
   padding: 5px;
   border-radius: 5px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-20 {
+  margin-top: 20px;
 }
