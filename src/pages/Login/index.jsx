@@ -12,7 +12,7 @@ export const Login = () => {
   const { login, error: authError,  loading } = useAuthentication();
 
   const handleSubmit = async (e) => {
-    e.preventDevault();
+    e.preventDefault();
     
     setError("");
 
@@ -22,13 +22,11 @@ export const Login = () => {
     }
     
     const res = await login(user);
-
     console.log(res);
     
   };
 
   useEffect(() => {
-    console.log(authError);
     if(authError){
       setError(authError);
     }

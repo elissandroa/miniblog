@@ -1,3 +1,4 @@
+import { db } from '../firebase/config';
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -39,24 +40,25 @@ export const useAuthentication = () => {
             await updateProfile(user, {
                 displayName: data.displayName,
             });
-            
+
             setLoading(false);
-            if(!error){
+            if (!error) {
                 setError(false);
             }
 
             return user;
 
         } catch (error) {
-    
+
             let systemErrorMessage;
 
-            if(error.message.includes("Password")){
+            if (error.message.includes("Password")) {
                 systemErrorMessage = "A senha precisa conter pelo menos 6 caracteres";
             } else if (error.message.includes("email-already")) {
                 systemErrorMessage = "E-mail já cadastrado."
 
             } else {
+                console.log(db);
                 systemErrorMessage = "Ocorreu um erro, por favor tente mais tarde.";
             }
             setLoading(false);
@@ -80,15 +82,14 @@ export const useAuthentication = () => {
             await signInWithEmailAndPassword(auth, data.email, data.password);
         } catch (error) {
             console.log(error.message);
-            console.log(typeof error.message);
             console.log(error.message.includes("user-not"));
 
             let systemErrorMessage;
 
-            if(error.message.includes("user-not-found")){
+            if (error.message.includes("user-not-found")) {
                 systemErrorMessage = "Usuário não encontrado";
-            } else if (error.message.includes("wrong-password")){
-                systemErrorMessage = "Senha incorreta";
+            } else if (error.message.includes("invalid-credential")) {
+                systemErrorMessage = "Usuário ou senha inválidos !";
             } else {
                 systemErrorMessage = "Ocorreu um erro, por favor tente mais tarde.";
             }
@@ -98,17 +99,17 @@ export const useAuthentication = () => {
         console.log(error);
         setLoading(false);
     };
- 
+
     useEffect(() => {
-        return  () => setCancelled(true);
+        return () => setCancelled(true);
     }, [])
 
     return {
         auth,
-        createUser, 
+        createUser,
         error,
         loading,
         logout,
         login,
     };
-}
+};
