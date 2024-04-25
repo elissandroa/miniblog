@@ -3,7 +3,7 @@ import { db } from '../firebase/config';
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 
-const initialSate = {
+const initialState = {
     loading: null,
     error: null,
 }
@@ -24,10 +24,10 @@ const insertReducer = (state, action) => {
 
 export const useInsertDocument = (docCollection) => {
 
-    const [response, dispatch] = useReducer(insertReducer, initialSate);
+    const [response, dispatch] = useReducer(insertReducer, initialState);
     const [cancelled, setCancelled] = useState(false);
 
-    const checkCancelBeforeDispatch(action) => {
+    const checkCancelBeforeDispatch = (action) => {
         if (!cancelled) {
             dispatch(action);
         }
@@ -37,16 +37,17 @@ export const useInsertDocument = (docCollection) => {
 
         checkCancelBeforeDispatch({
             type: "LOADING"
-        })
+        });
 
         try {
-            const newDocument = { ...document, createdAT: Timestamp.now() };
-            const insertDocument = await addDoc(
-                collection(db, docCollection, newDocument)
+            const newDocument = { ...document, createdAt: Timestamp.now() };
+            const insertedDocument = await addDoc(
+                collection(db, docCollection), 
+                newDocument
             )
             checkCancelBeforeDispatch({
                 type: "INSERTED_DOC",
-                payload: insertDocument,
+                payload: insertedDocument,
             }
             )
         } catch (error) {
@@ -59,7 +60,8 @@ export const useInsertDocument = (docCollection) => {
     }
 
     useEffect(() => {
-        () => setCancelled(true);
-    }, [])
+       return () => setCancelled(true);
+    }, []);
+
     return { insertDocument, response };
-}
+};
