@@ -11,7 +11,6 @@ export const Navbar = () => {
     const { logout } = useAuthentication();
 
     
-   
 
     return (
         <nav className='navbar'>

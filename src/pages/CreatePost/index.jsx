@@ -16,22 +16,36 @@ export const CreatePost = () => {
   const navitgate = useNavigate();
   const { user } = useAuthValue();
   const { insertDocument, response } = useInsertDocument("posts");
+  const navigate = useNavigate();
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError("");
 
+    try {
+       new URL(image);
+    } catch (error) {
+      setFormError("A imagem precisa ser uma URL.")
+    }
+
+    const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
+
+    if(!title || !image || !body) {
+      setFormError("Por favor, preencha todos os campos!");
+    }
+
+    if(formError) return;
+
     insertDocument({
       title,
       image,
       body,
-      tags,
+      tagsArray,
       uid: user.uid,
-      createdBy: user.displayName,
-
+      createBy: user.displayName,
     });
-    console.log("user:", user);
+    navitgate("/");
   }
 
   return (

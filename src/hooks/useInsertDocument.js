@@ -3,6 +3,7 @@ import { db } from '../firebase/config';
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 
+
 const initialState = {
     loading: null,
     error: null,
@@ -26,6 +27,7 @@ export const useInsertDocument = (docCollection) => {
 
     const [response, dispatch] = useReducer(insertReducer, initialState);
     const [cancelled, setCancelled] = useState(false);
+    
 
     const checkCancelBeforeDispatch = (action) => {
         if (!cancelled) {
@@ -34,7 +36,7 @@ export const useInsertDocument = (docCollection) => {
     }
 
     const insertDocument = async (document) => {
-
+        console.log(document);
         checkCancelBeforeDispatch({
             type: "LOADING"
         });
@@ -42,7 +44,7 @@ export const useInsertDocument = (docCollection) => {
         try {
             const newDocument = { ...document, createdAt: Timestamp.now() };
             const insertedDocument = await addDoc(
-                collection(db, docCollection), 
+                collection(db, docCollection),
                 newDocument
             )
             checkCancelBeforeDispatch({
@@ -60,7 +62,7 @@ export const useInsertDocument = (docCollection) => {
     }
 
     useEffect(() => {
-       return () => setCancelled(true);
+        return () => setCancelled(true);
     }, []);
 
     return { insertDocument, response };

@@ -32,7 +32,7 @@ function App() {
     return <p>Carregando...</p>
   }
   return (
-    <AuthProvider value={user}>
+  <AuthProvider value={{user}}>
       <div>
         <BrowserRouter>
           <Navbar />
