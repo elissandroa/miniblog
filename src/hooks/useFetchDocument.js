@@ -11,7 +11,7 @@ import {
 } from 'firebase/firestore';
 
 
-export const useFetchDocuments = (docCollection, search = null, uid = mull) => {
+export const useFetchDocuments = (docCollection, search, uid) => {
 
     const [documents, setDocuments] = useState(null);
     const [error, setError] = useState(null);
@@ -30,7 +30,7 @@ export const useFetchDocuments = (docCollection, search = null, uid = mull) => {
             try {
                 let q;
 
-                q = await query(collectionRef, orderBy('createdAt', desc));
+                q = await query(collectionRef, orderBy('createdAt', 'desc'));
 
                 await onSnapshot(q, (QuerySnapshot) => {
                     setDocuments(
@@ -55,5 +55,5 @@ export const useFetchDocuments = (docCollection, search = null, uid = mull) => {
         return () => setCancelled(true);
     }, [])
 
-    return {document, loading, error};
+    return {documents, loading, error};
 }
