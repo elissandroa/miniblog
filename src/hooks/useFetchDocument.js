@@ -1,59 +1,43 @@
 import { useEffect, useState } from 'react';
 import { db } from '../firebase/config';
 
-import {
-    collection,
-    query,
-    orderBy,
-    onSnapshot,
-    where,
-    QuerySnapshot
-} from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 
-export const useFetchDocuments = (docCollection, search, uid) => {
+export const useFetchDocument = (docCollection, id) => {
 
-    const [documents, setDocuments] = useState(null);
+    const [document, setDocument] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(null);
     const [cancelled, setCancelled] = useState(false);
 
     useEffect(() => {
 
-        async function loadData() {
+        async function loadDocument() {
             if (cancelled) return;
 
             setLoading(true);
 
-            const collectionRef = await collection(db, docCollection);
-
             try {
-                let q;
+                const docRef = await doc(db, docCollection, id);
+                const docSnap = getDoc(docRef);
 
-                q = await query(collectionRef, orderBy('createdAt', 'desc'));
-
-                await onSnapshot(q, (QuerySnapshot) => {
-                    setDocuments(
-                        QuerySnapshot.docs.map((doc) => ({
-                            id: doc.id,
-                            ...doc.data(),
-                        }))
-                    )
-                })
+                setDocument((await docSnap).data());
                 setLoading(false);
+
             } catch (error) {
-                console.log(error);
                 setError(error.message);
-
-                setLoading(false);
+                setLoading(true);
             }
+
+
         }
-        loadData();
-    }, [docCollection, search, uid, cancelled]);
+        loadDocument();
+    }, [docCollection, id, cancelled]);
 
     useEffect(() => {
         return () => setCancelled(true);
     }, [])
 
-    return {documents, loading, error};
+    return { document, loading, error };
 }

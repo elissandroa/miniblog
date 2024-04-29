@@ -12,6 +12,8 @@ import { useState, useEffect } from 'react';
 import { useAuthentication } from './hooks/useAuthentication';
 import { Dashboard } from './pages/Dashboard';
 import { CreatePost } from './pages/CreatePost';
+import { Search } from './pages/Search';
+import { Post } from './pages/Post';
 
 
 
@@ -40,6 +42,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/posts/:id" element={<Post />} />
               <Route path="/login" element={!user ? <Login /> : <Navigate to="/"/>} />
               <Route path="/register" element={!user ? <Register /> : <Navigate to="/"/>} />
               <Route path="/dashboard" element={user ? <Dashboard/> : <Navigate to="/login"/>} />
