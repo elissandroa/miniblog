@@ -22,3 +22,9 @@
   .post_container img {
     max-width: 50%;
   }
+
+  .body_container p {
+    width: 50%;
+    margin: 0 auto;
+    text-align: left;
+  }

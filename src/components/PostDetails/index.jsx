@@ -19,7 +19,7 @@ export const PostDetails = ({post}) => {
           ))
         }
       </div>
-        <Link to={`posts/${post.id}`} className='btn btn-outline'>Ler</Link>
+        <Link to={`/posts/${post.id}`} className='btn btn-outline'>Ler</Link>
     </div>
   )
 }
