@@ -3,6 +3,7 @@ import "./styles.css";
 
 import { useAuthValue } from "../../context/AuthContext";
 import { useFetchDocuments } from "../../hooks/useFetchDocuments";
+import { useDeleteDocument } from "../../hooks/useDeleteDocument";
 
 export const Dashboard = () => {
   const { user } = useAuthValue();
@@ -10,11 +11,9 @@ export const Dashboard = () => {
 
   const { documents: posts, loading } = useFetchDocuments("posts", null, uid);
 
-  const deleteDocument = (id) => {
+  const { deleteDocument } = useDeleteDocument("posts");
 
-  }
-
-  if(loading) {
+  if (loading) {
     return <p>Carregando...</p>
   }
 
@@ -39,7 +38,7 @@ export const Dashboard = () => {
             <p>{post.title}</p>
             <div>
               <Link to={`/posts/${post.id}`} className="btn btn-outline">Ver</Link>
-              <Link to={`/posts/edit${post.id}`} className="btn btn-outline">Edit</Link>
+              <Link to={`/posts/edit/${post.id}`} className="btn btn-outline">Edit</Link>
               <button onClick={() => deleteDocument(post.id)} className="btn btn-outline btn-danger">Excluir</button>
             </div>
           </div>)}
